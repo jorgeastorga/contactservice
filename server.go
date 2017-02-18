@@ -26,7 +26,7 @@ var AppDB *gorm.DB
 func init(){
 	var err error
 
-	dbConnection := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",
+	dbConnection := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=True",
 		DBUser,
 		DBPass,
 		DBHost,
@@ -95,10 +95,13 @@ func handleRequest(w http.ResponseWriter, r *http.Request){
  *
  */
 func handleGet(w http.ResponseWriter, r *http.Request) (err error){
+
 	id, err := strconv.Atoi(path.Base(r.URL.Path))
+
 	if err != nil {
 		return
 	}
+
 	contact, err := retrieve(id)
 	if err != nil {
 		return

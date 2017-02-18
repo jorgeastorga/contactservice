@@ -33,6 +33,7 @@ type Product struct{
 func (c *Contact)create() (err error){
 
 	err = AppDB.Create(&Contact{FirstName:c.FirstName, LastName: c.LastName}).Error
+
 	if err != nil{
 		log.Println("Error Creating the Contact: ", err.Error())
 	}
@@ -45,11 +46,9 @@ func (c *Contact)create() (err error){
 *
 */
 func retrieve(id int) (contact Contact, err error) {
-	/*contact = Contact{}
-	err = Db.QueryRow("select id, firstName, lastName, address1 from contacts where id = $1",
-		id).Scan(&contact.Id, &contact.FirstName, &contact.LastName, &contact.Address1)*/
-	return contact, err
 
+	AppDB.First(&contact, id)
+	return contact, err
 }
 
 
