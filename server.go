@@ -7,7 +7,7 @@ import(
 	"strconv"
 	"log"
 	"fmt"
-	"github.com/jinzhu/gorm"
+	"github.com/jinzhu/gorm" //TODO update package diagram in Lucidcharts to include this package
 	_"github.com/go-sql-driver/mysql" //database driver
 )
 
@@ -41,12 +41,14 @@ func init(){
 		log.Println("DB Connection: connected to the database successfully")
 	}
 
-	AppDB.Create(&Product{Code:"L1212", Price: 1000})
-	AppDB.Create(&Contact{FirstName:"Jorge", LastName:"Astorga"})
+	//TODO this code needs to go, it was just a test
+	//AppDB.Create(&Product{Code:"L1212", Price: 1000})
+	//AppDB.Create(&Contact{FirstName:"Jorge", LastName:"Astorga"})
 
 	//defer AppDB.Close()
 
 	//Migrate Schema
+	//TODO remove product since I am not using that model
 	AppDB.AutoMigrate(&Contact{}, &Product{})
 
 	//Testing the creation of a contact
@@ -57,23 +59,24 @@ func init(){
 func main(){
 
 	//Testing to add a contact
+	//TODO: remove the following code, it's only a test
 	AppDB.Create(&Contact{FirstName:"Oralge", LastName:"Orale"})
 
 
 	server := http.Server{
-		Addr: "127.0.0.1:8080",
+		//Addr: "127.0.0.1:8080",
+		Addr: "0.0.0.0:8080", //TODO: need to investigate why not using the IP address of the instance and also investigate if I should bind to the private IP as opposed to the public IP or 0.0.0.0:8080
 	}
 
 	http.HandleFunc("/contact/", handleRequest)
 	server.ListenAndServe()
-
 }
 
 
 
 func handleRequest(w http.ResponseWriter, r *http.Request){
 	var err error
-	log.Println("testing")
+	log.Println("testing") //TODO get rid of this code
 	switch r.Method {
 	case "GET":
 		err = handleGet(w, r)
@@ -95,6 +98,8 @@ func handleRequest(w http.ResponseWriter, r *http.Request){
  *
  */
 func handleGet(w http.ResponseWriter, r *http.Request) (err error){
+
+	//TODO: understand this code in more depth
 
 	id, err := strconv.Atoi(path.Base(r.URL.Path))
 

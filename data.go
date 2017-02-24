@@ -17,7 +17,7 @@ type Contact struct {
 	City string `json:"city"`
 	State string `json:"state"`
 	ZipCode int `json:"zip"`
-	Company string `json:"compnay"`
+	Company string `json:"company"`
 	Email string `json:"email"`
 	Phone string `json:"phone"`
 }
