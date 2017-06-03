@@ -7,6 +7,11 @@ import (
 )
 
 
+/**
+* Product (structure)
+* Product data model and definition
+*
+*/
 type Contact struct {
 	gorm.Model // declaring the model (based on Gorm)
 	//Id int `json:"id"`
@@ -22,16 +27,13 @@ type Contact struct {
 	Phone string `json:"phone"`
 }
 
-type Product struct{
-	gorm.Model
-	Code string
-	Price float64
-}
 /**
- * Function used to create  a contact in the db
+ * Create (function) -
+ * Function used to create a contact in the database
  */
 func (c *Contact)create() (err error){
 
+	//Create the contact
 	err = AppDB.Create(&Contact{FirstName:c.FirstName, LastName: c.LastName}).Error
 
 	if err != nil{
@@ -42,7 +44,8 @@ func (c *Contact)create() (err error){
 }
 
 /**
-* Function used to retrieve a Contact from the db
+* Retrieve (function) -
+* Function used to retrieve a Contact from the database
 *
 */
 func retrieve(id int) (contact Contact, err error) {
@@ -53,8 +56,8 @@ func retrieve(id int) (contact Contact, err error) {
 
 
 /**
-* Function used to update a Contact from the db
-*
+* Update (function) -
+* Function used to update a Contact from the database
 *
 */
 //TODO: update the update method to use Gorm
@@ -65,9 +68,10 @@ func (c *Contact) update() (err error){
 }
 
 /**
+* Delete (function) - delete contact
 * Function used to delete a Contact from the db
 *
- */
+*/
 //TODO: update the delete method to use Gorm
 func (c *Contact)delete() (err error){
 	//_, err = Db. Exec("delete from contacts where id = $1", c.Id)
