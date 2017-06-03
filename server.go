@@ -3,24 +3,13 @@ package main
 import(
 	"encoding/json"
 	"net/http"
-	"path"
-	"strconv"
-	"log"
-	"fmt"
+	_"log"
+	_"fmt"
 	"github.com/jinzhu/gorm" //TODO update package diagram in Lucidcharts to include this package
 	_"github.com/go-sql-driver/mysql" //MySQL database driver
 	_"github.com/jinzhu/gorm/dialects/postgres" //PostgreSQL database driver
 )
 
-//DB Connection Details
-//TODO: Find a way to make this information more secure and/or read from a config file
-const(
-	DBHost = "127.0.0.1"
-	DBPort = "3306"
-	DBUser = "root"
-	DBPass = "testing123"
-	DBDbase = "contakx"
-)
 
 //Database identifier based on gorm.DB
 var AppDB *gorm.DB
@@ -32,43 +21,7 @@ var AppDB *gorm.DB
  * a new schema (based on objects)
  */
 func init() {
-	var err error
 
-	//Setup connection string
-	//TODO remove MYSQL connectin string once PostgreSQL works
-	/*dbConnection := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=True",
-		DBUser,
-		DBPass,
-		DBHost,
-		DBPort,
-		DBDbase)*/
-
-	dbConnection := fmt.Sprintf("host=%s user=%s dbname=%s sslmode=%s password=%s",
-		DBHost,
-		DBUser,
-		DBDbase,
-		"disable",
-		DBPass)
-
-	//Open DB - Test Connection
-	AppDB, err = gorm.Open("postgres", dbConnection)
-
-	//TODO Remove the reference to MYSQL connection open
-	//AppDB, err = gorm.Open("mysql", dbConnection)
-
-	if err != nil {
-		log.Println("Failed to connect to database: ", err.Error())
-	} else {
-		log.Println("DB Connection: connected to the database successfully")
-	}
-
-	//defer AppDB.Close()
-
-	//Migrate Schema
-	AppDB.AutoMigrate(&Contact{})
-
-	//TODO: Remove this code
-	//Testing the creation of a contact
 	newContact := &Contact{FirstName: "Adriana", LastName: "Astorga"}
 	newContact.create()
 }
@@ -125,19 +78,7 @@ func handleRequest(w http.ResponseWriter, r *http.Request){
  */
 func handleGet(w http.ResponseWriter, r *http.Request) (err error){
 
-	//TODO: understand this code in more depth
-
-	id, err := strconv.Atoi(path.Base(r.URL.Path))
-
-	if err != nil {
-		return
-	}
-
-	contact, err := retrieve(id)
-
-	if err != nil {
-		return
-	}
+	contact := &Contact{FirstName:"Lucca", LastName:"Astorga"}
 
 	output, err := json.MarshalIndent(&contact, "", "\t\t")
 	if err != nil {
@@ -163,7 +104,8 @@ func handlePost(w http.ResponseWriter, r *http.Request) (err error){
 	//Create contact
 	var contact Contact
 	json.Unmarshal(body, &contact)
-	err = contact.create()
+
+	contact.create()
 
 	if err != nil {
 		return
@@ -179,16 +121,11 @@ func handlePost(w http.ResponseWriter, r *http.Request) (err error){
  *
  */
 func handlePut(w http.ResponseWriter, r *http.Request)(err error){
-	id, err := strconv.Atoi(path.Base(r.URL.Path))
-	if err != nil {
-		return
-	}
+
 
 	//retrieve the contact from the datastore
-	contact, err := retrieve(id)
-	if err != nil {
-		return
-	}
+	contact := &Contact{FirstName:"Update", LastName:"Astorga"}
+
 
 	//retrieve the updated info from request (json doc)
 	len := r.ContentLength
@@ -197,7 +134,8 @@ func handlePut(w http.ResponseWriter, r *http.Request)(err error){
 	json.Unmarshal(body, &contact)
 
 	//update the contact in the datastore
-	err = contact.update()
+	contact.update()
+
 	if err != nil {
 		return
 	}
@@ -212,22 +150,19 @@ func handlePut(w http.ResponseWriter, r *http.Request)(err error){
  */
 func handleDelete(w http.ResponseWriter, r *http.Request) (err error){
 
-	id, err := strconv.Atoi(path.Base(r.URL.Path))
 	if err != nil {
 		return
 	}
 
 	//Retrieve the contact from the datastore (if it exists)
-	contact, err := retrieve(id)
+	contact := &Contact{FirstName:"Update", LastName:"Astorga"}
+
 	if err != nil {
 		return
 	}
 
 	//Delete the contact from the datastore
-	err = contact.delete()
-	if err != nil {
-		return
-	}
+	 contact.delete()
 
 	w.WriteHeader(200)
 	return

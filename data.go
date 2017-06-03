@@ -31,16 +31,9 @@ type Contact struct {
  * Create (function) -
  * Function used to create a contact in the database
  */
-func (c *Contact)create() (err error){
+func (c *Contact)create() {
 
-	//Create the contact
-	err = AppDB.Create(&Contact{FirstName:c.FirstName, LastName: c.LastName}).Error
-
-	if err != nil{
-		log.Println("Error Creating the Contact: ", err.Error())
-	}
-
-	return err
+	log.Println("Created a contact")
 }
 
 /**
@@ -48,12 +41,10 @@ func (c *Contact)create() (err error){
 * Function used to retrieve a Contact from the database
 *
 */
-func retrieve(id int) (contact Contact, err error) {
+func retrieve(id int)  {
+	log.Println("Retrived a contact")
 
-	AppDB.First(&contact, id)
-	return contact, err
 }
-
 
 /**
 * Update (function) -
@@ -61,10 +52,8 @@ func retrieve(id int) (contact Contact, err error) {
 *
 */
 //TODO: update the update method to use Gorm
-func (c *Contact) update() (err error){
-	/*_, err = Db. Exec("update contacts set firstname = $2, lastname = $3, address1 = $3 where id = $1",
-		c.Id, c.FirstName, c.LastName, c.Address1)*/
-	return err
+func (c *Contact) update() {
+	log.Println("Updated the contact")
 }
 
 /**
@@ -73,8 +62,7 @@ func (c *Contact) update() (err error){
 *
 */
 //TODO: update the delete method to use Gorm
-func (c *Contact)delete() (err error){
-	//_, err = Db. Exec("delete from contacts where id = $1", c.Id)
-	return
+func (c *Contact)delete() {
+	log.Println("Deleted a contact")
 }
 
