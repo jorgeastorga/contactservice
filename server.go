@@ -8,11 +8,12 @@ import(
 	"log"
 	"fmt"
 	"github.com/jinzhu/gorm" //TODO update package diagram in Lucidcharts to include this package
-	_"github.com/go-sql-driver/mysql" //database driver
+	_"github.com/go-sql-driver/mysql" //MySQL database driver
+	_"github.com/jinzhu/gorm/dialects/postgres" //PostgreSQL database driver
 )
 
 //DB Connection Details
-//TODO: Find a way to make this information more secure
+//TODO: Find a way to make this information more secure and/or read from a config file
 const(
 	DBHost = "127.0.0.1"
 	DBPort = "3306"
@@ -30,23 +31,34 @@ var AppDB *gorm.DB
  * Defines the connection string for the mysql connection, opens the connection, and migrates to
  * a new schema (based on objects)
  */
-func init(){
+func init() {
 	var err error
 
 	//Setup connection string
-	dbConnection := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=True",
+	//TODO remove MYSQL connectin string once PostgreSQL works
+	/*dbConnection := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=True",
 		DBUser,
 		DBPass,
 		DBHost,
 		DBPort,
-		DBDbase)
+		DBDbase)*/
+
+	dbConnection := fmt.Sprintf("host=%s user=%s dbname=%s sslmode=%s password=%s",
+		DBHost,
+		DBUser,
+		DBDbase,
+		"disable",
+		DBPass)
 
 	//Open DB - Test Connection
-	AppDB, err = gorm.Open("mysql", dbConnection)
+	AppDB, err = gorm.Open("postgres", dbConnection)
+
+	//TODO Remove the reference to MYSQL connection open
+	//AppDB, err = gorm.Open("mysql", dbConnection)
 
 	if err != nil {
 		log.Println("Failed to connect to database: ", err.Error())
-	}else {
+	} else {
 		log.Println("DB Connection: connected to the database successfully")
 	}
 
@@ -57,12 +69,8 @@ func init(){
 
 	//TODO: Remove this code
 	//Testing the creation of a contact
-	newContact := &Contact{FirstName:"Jorge", LastName:"Astorga"}
+	newContact := &Contact{FirstName: "Adriana", LastName: "Astorga"}
 	newContact.create()
-
-	//TODO: remove the following code, it's only a test
-	//Testing to add a contact
-	AppDB.Create(&Contact{FirstName:"Oralge", LastName:"Orale"})
 }
 
 /**
