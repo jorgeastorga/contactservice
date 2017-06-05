@@ -8,6 +8,7 @@ import(
 	"github.com/jinzhu/gorm" //TODO update package diagram in Lucidcharts to include this package
 	_"github.com/go-sql-driver/mysql" //MySQL database driver
 	_"github.com/jinzhu/gorm/dialects/postgres" //PostgreSQL database driver
+	"log"
 )
 
 
@@ -79,6 +80,8 @@ func handleRequest(w http.ResponseWriter, r *http.Request){
 func handleGet(w http.ResponseWriter, r *http.Request) (err error){
 
 	contact := &Contact{FirstName:"Lucca", LastName:"Astorga"}
+
+	log.Println("Retrived a contact")
 
 	output, err := json.MarshalIndent(&contact, "", "\t\t")
 	if err != nil {
