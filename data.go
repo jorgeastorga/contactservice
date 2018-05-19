@@ -4,6 +4,7 @@ import (
 	_"github.com/lib/pq"
 	"log"
 	"github.com/jinzhu/gorm"
+	"os"
 )
 
 
@@ -27,6 +28,9 @@ type Contact struct {
 	Phone string `json:"phone"`
 }
 
+//Defining the logger
+var Warn *log.Logger
+
 /**
  * Create (function) -
  * Function used to create a contact in the database
@@ -34,6 +38,19 @@ type Contact struct {
 func (c *Contact)create() {
 
 	log.Println("Created a contact")
+
+	//Testing logging to a file
+
+	warnFile, err := os.OpenFile("warnings.log", os.O_RDWR|os.O_APPEND|os.O_CREATE, 0660)
+	defer warnFile.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	Warn = log.New(warnFile, "WARNING: ",log.LstdFlags)
+	Warn.Println("The contact was written to a file called warnings.log.")
+
+	log.Println("It worked")
 }
 
 /**
