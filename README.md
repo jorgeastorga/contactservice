@@ -5,6 +5,9 @@
 ### Branch: *master*
 *This version of the microservice attempts requires a postgres database to connect to.
 
+### Branch: *logging*
+*This version of the microservice does not require a database and has a simple version of logging to files
+
 ### Branch: *nodb*
 *This version of the microservice only fakes the response to the API calls. 
 It is only used as a means for me to learn how to deploy a service in AWS 
