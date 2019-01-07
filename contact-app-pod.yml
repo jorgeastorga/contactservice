@@ -1,0 +1,13 @@
+version: v1
+kind: Pod
+metadata:
+  name: contact-app-pod
+  labels:
+    name: contact-app-pod
+    app: contact-app-pod
+spec:
+  containers:
+  - name: contact-app
+    image: estebanastorga/estebanastorga
+    ports: 
+      - containerPort: 8080

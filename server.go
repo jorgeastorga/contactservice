@@ -1,14 +1,17 @@
 package main
 
-import(
+import (
+	"bytes"
 	"encoding/json"
-	"net/http"
-	_"log"
-	_"fmt"
-	"github.com/jinzhu/gorm" //TODO update package diagram in Lucidcharts to include this package
-	_"github.com/go-sql-driver/mysql" //MySQL database driver
-	_"github.com/jinzhu/gorm/dialects/postgres" //PostgreSQL database driver
+	"fmt"
+	_ "fmt"
+	_ "github.com/go-sql-driver/mysql"           //MySQL database driver
+	"github.com/jinzhu/gorm"                     //TODO update package diagram in Lucidcharts to include this package
+	_ "github.com/jinzhu/gorm/dialects/postgres" //PostgreSQL database driver
+	"io/ioutil"
 	"log"
+	_ "log"
+	"net/http"
 )
 
 
@@ -90,6 +93,33 @@ func handleGet(w http.ResponseWriter, r *http.Request) (err error){
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(output)
+
+
+	/************** Adding some code to call an API ************/
+	fmt.Print("/nCalling an API/n")
+
+	response, err := http.Get("https://httpbin.org/ip") //call the API
+	if err != nil {
+		fmt.Println("The HTTP request failed with error %s\n", err)
+	} else {
+		data, _ := ioutil.ReadAll(response.Body)
+		fmt.Println(string(data))
+	}
+
+
+	/************** Adding some code to call an API ************/
+
+	jsonData := map[string]string{"firstname":"Nic", "lastname":"Raboy"}
+	jsonValue, _ := json.Marshal(jsonData)
+	response, err = http.Post("https://httpbin.org/post", "application/json", bytes.NewBuffer(jsonValue))
+	if err != nil {
+		fmt.Println("The HTTP request failed with error %s\n", err)
+	} else {
+		data, _ := ioutil.ReadAll(response.Body)
+		fmt.Println(string(data))
+	}
+	fmt.Println("Terminating the application....")
+
 	return
 }
 
